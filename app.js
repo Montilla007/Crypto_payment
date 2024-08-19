@@ -1,11 +1,21 @@
 const express = require('express');
 const morgan = require('morgan');
-const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const AppError = require('./utils/appError');
-const globalErrorHandler = require('./controllers/errorController');
+
+
+// connectDB
+const connectToDatabase = require('./database/connect')
+
+// Authentication
+
+
+// Routers
 const studentRouter = require('./routes/studentRoute');
+
+//Error Handler
+const notFoundMiddleware = require('./middleware/not-found');
+const errorHandlerMiddleware = require('./middleware/error-handler');
 
 // Load environment variables from the config file
 dotenv.config({ path: './config.env' });
@@ -30,7 +40,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/api/v1/student', studentRouter);
+app.use();
 
 app.get('/', (req, res) => {
   res.redirect('/api/v1/student');
@@ -42,22 +52,20 @@ app.all('*', (req, res, next) => {
 });
 
 // Global error handling middleware
-app.use(globalErrorHandler);
-
-// Database connection
-const DB = process.env.DATABASE.replace(
-  '<password>',
-  process.env.DATABASE_PASSWORD,
-);
-
-mongoose
-  .connect(DB)
-  .then(() => console.log('DB connection successful!'));
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
 
 // Start the server
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`App is running on port ${port}...`);
-});
 
-module.exports = app;
+const start = async () => {
+    try {
+      await connectToDatabase();
+      app.listen(port, () =>
+        console.log(`Server is listening on port ${port}...`)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  start();
