@@ -2,16 +2,18 @@ const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const { NotFoundError } = require('./errors');
 
 
 // connectDB
-const connectToDatabase = require('./database/connect')
+const connectToDatabase = require('./database/connection');
 
 // Authentication
-
+const authenticateUser = require('./middleware/userAuthentication');
 
 // Routers
-const studentRouter = require('./routes/studentRoute');
+const authRouter = require('./routes/auth');
+const homeRouter = require('./routes/home');
 
 //Error Handler
 const notFoundMiddleware = require('./middleware/not-found');
@@ -40,15 +42,12 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use();
-
-app.get('/', (req, res) => {
-  res.redirect('/api/v1/student');
-});
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/home', homeRouter)
 
 // Handle all undefined routes
 app.all('*', (req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
+  next(new NotFoundError(`Can't find ${req.originalUrl} on this server`, 404));
 });
 
 // Global error handling middleware
@@ -59,13 +58,13 @@ app.use(errorHandlerMiddleware);
 const port = process.env.PORT || 3000;
 
 const start = async () => {
-    try {
-      await connectToDatabase();
-      app.listen(port, () =>
-        console.log(`Server is listening on port ${port}...`)
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  start();
+  try {
+    await connectToDatabase();
+    app.listen(port, () =>
+      console.log(`Server is listening on port ${port}...`)
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+start();
