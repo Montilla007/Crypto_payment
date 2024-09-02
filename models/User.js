@@ -47,6 +47,10 @@ const UserSchema = new mongoose.Schema({
     required: [true, 'Please provide password'],
     minlength: 6,
   },
+  crypto: {
+    type: String,
+    required: [false],
+  },
 }, { timestamps: true })
 
 UserSchema.pre('save', async function () {

@@ -8,8 +8,8 @@ const { NotFoundError } = require('./errors');
 // connectDB
 const connectToDatabase = require('./database/connection');
 
-// Authentication
-const authenticateUser = require('./middleware/userAuthentication');
+// // Authentication
+// const authenticateUser = require('./middleware/userAuthentication');
 
 // Routers
 const authRouter = require('./routes/auth');
