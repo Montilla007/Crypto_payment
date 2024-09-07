@@ -31,8 +31,9 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 // Custom middlewares to log requests and add request time
-app.use('/',(req, res) => {
-  res.send("Hello Word!");
+app.use((req, res, next) => {
+  console.log('Hello from the server 👋');
+  next();
 });
 
 app.use((req, res, next) => {
