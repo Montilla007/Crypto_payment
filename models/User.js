@@ -33,7 +33,7 @@ const UserSchema = new mongoose.Schema({
   //   min: 1,
   //   max: 120,
   // },
-  userEmail: {
+  email: {
     type: String,
     required: [true, 'Please provide email'],
     match: [
