@@ -5,7 +5,7 @@ const connectToMetaMask = async (req, res) => {
   try {
     // Connect using Infura (replace with your Infura project ID)
     const provider = new Web3.providers.HttpProvider(
-      `https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID`
+      `https://mainnet.infura.io/v3/aa79fff789bb4054bf4174eeca2b893a`
     );
 
     const web3 = new Web3(provider);
