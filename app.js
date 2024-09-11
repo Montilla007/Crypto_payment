@@ -14,6 +14,7 @@ const connectToDatabase = require('./database/connection');
 // Routers
 const authRouter = require('./routes/auth');
 const homeRouter = require('./routes/home');
+const web3Router = require('./routes/web3');
 
 //Error Handler
 const notFoundMiddleware = require('./middleware/not-found');
@@ -43,7 +44,8 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/home', homeRouter)
+app.use('/api/v1/home', homeRouter);
+app.use('/api/v1/web3', web3Router);
 
 // Handle all undefined routes
 app.all('*', (req, res, next) => {
